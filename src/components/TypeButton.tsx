@@ -1,19 +1,30 @@
-import { Input, Box, Text, Button, HStack, Pressable } from "native-base";
-
+import { Text, Pressable } from "native-base";
 import React from "react";
 
-const TypeButton = ({ text, index, last }: { text: string; index: number; last?: boolean }) => {
+const TypeButton = ({
+  text,
+  onPress,
+  active,
+  last = false,
+}: {
+  text: string;
+  onPress: React.Dispatch<React.SetStateAction<string>>;
+  active: string;
+  last?: boolean;
+}) => {
+  const currentActive = active === text;
   return (
     <Pressable
       fontSize="md"
-      minW={36}
       borderRightWidth={last ? 0 : 1}
-      padding={2}
+      paddingX={4}
+      paddingY={2}
+      bgColor={currentActive ? "#0A91B3" : "white"}
       onPress={() => {
-        console.log(`pressed:`, text);
+        onPress(text);
       }}
     >
-      <Text>{text}</Text>
+      <Text color={currentActive ? "white" : "black"}>{text}</Text>
     </Pressable>
   );
 };

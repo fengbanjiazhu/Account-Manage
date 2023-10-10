@@ -1,58 +1,72 @@
 import { Input, Box, Text, Button, HStack } from "native-base";
-import React from "react";
+import React, { useState } from "react";
 import TypeButton from "./TypeButton";
-
-const types = ["Game", "Platform", "Bank", "Others"];
+import LabelInput from "./LabelInput";
 
 const AddForm = () => {
+  const [accountType, setAccountType] = useState("Game");
+
   return (
-    <Box alignItems="center">
-      <Box
-        maxW="400"
-        rounded="lg"
-        bgColor={"white"}
-        overflow="hidden"
-        borderColor="coolGray.200"
-        borderWidth="1"
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
+    <Box
+      maxW="400"
+      rounded="lg"
+      bgColor={"white"}
+      overflow="hidden"
+      borderColor="coolGray.200"
+      borderWidth="1"
+      justifyContent={"center"}
+      alignItems={"center"}
+    >
+      <Box marginY={2}>
+        <Text marginBottom={1} fontSize="md">
+          Types
+        </Text>
         <HStack
-          maxW="350"
+          maxW="380"
           alignItems={"center"}
           justifyContent={"center"}
           borderWidth={1}
-          marginY={2}
           borderRadius={5}
         >
-          {types.map((type, index) => {
-            return (
-              <TypeButton text={type} key={index} index={index} last={index === types.length - 1} />
-            );
-          })}
+          <TypeButton text={"Games"} key={"Games"} onPress={setAccountType} active={accountType} />
+          <TypeButton
+            text={"Platform"}
+            key={"Platform"}
+            onPress={setAccountType}
+            active={accountType}
+          />
+          <TypeButton text={"Bank"} key={"Bank"} onPress={setAccountType} active={accountType} />
+          <TypeButton
+            text={"Others"}
+            key={"Others"}
+            last={true}
+            onPress={setAccountType}
+            active={accountType}
+          />
         </HStack>
-        <Box marginBottom={2}>
-          <Text fontSize="md" marginLeft={4}>
-            Account Name
-          </Text>
-          <Input mx="4" w="300" bgColor={"gray.200"}></Input>
-        </Box>
-        <Box marginBottom={2}>
-          <Text fontSize="md" marginLeft={4}>
-            Account Number
-          </Text>
-          <Input mx="4" w="300" bgColor={"gray.200"}></Input>
-        </Box>
-        <Box marginBottom={2}>
-          <Text fontSize="md" marginLeft={4}>
-            Account Password
-          </Text>
-          <Input mx="4" w="300" bgColor={"gray.200"}></Input>
-        </Box>
+      </Box>
 
-        <Box marginBottom={2} alignItems={"center"}>
-          <Button w="300">Save</Button>
-        </Box>
+      <LabelInput
+        label="Account Name"
+        onChange={() => {
+          console.log("first");
+        }}
+      />
+      <LabelInput
+        label="Account Number"
+        onChange={() => {
+          console.log("first");
+        }}
+      />
+      <LabelInput
+        label="Account Password"
+        onChange={() => {
+          console.log("first");
+        }}
+      />
+
+      <Box marginY={2} alignItems={"center"}>
+        <Button w="300">Save</Button>
       </Box>
     </Box>
   );
