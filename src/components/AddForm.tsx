@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import TypeButton from "./TypeButton";
 import LabelInput from "./LabelInput";
 
+const btnTypes = ["Game", "Platform", "Bank", "Others"];
+
 const AddForm = () => {
   const [accountType, setAccountType] = useState("Game");
 
@@ -28,21 +30,17 @@ const AddForm = () => {
           borderWidth={1}
           borderRadius={5}
         >
-          <TypeButton text={"Games"} key={"Games"} onPress={setAccountType} active={accountType} />
-          <TypeButton
-            text={"Platform"}
-            key={"Platform"}
-            onPress={setAccountType}
-            active={accountType}
-          />
-          <TypeButton text={"Bank"} key={"Bank"} onPress={setAccountType} active={accountType} />
-          <TypeButton
-            text={"Others"}
-            key={"Others"}
-            last={true}
-            onPress={setAccountType}
-            active={accountType}
-          />
+          {btnTypes.map((type, index) => {
+            return (
+              <TypeButton
+                text={type}
+                key={type}
+                onPress={setAccountType}
+                active={accountType}
+                last={index === btnTypes.length - 1}
+              />
+            );
+          })}
         </HStack>
       </Box>
 
