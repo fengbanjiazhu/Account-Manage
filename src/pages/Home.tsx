@@ -9,7 +9,6 @@ const Home = () => {
   return (
     <View style={styles.root}>
       <ModalForm modalVisible={openForm} setModalVisible={setOpenForm} />
-
       <IconButton
         onPress={() => {
           setOpenForm(!openForm);

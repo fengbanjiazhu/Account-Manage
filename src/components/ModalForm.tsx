@@ -14,29 +14,9 @@ const ModalForm = ({
       <Modal.Content maxWidth="450">
         <Modal.CloseButton />
         <Modal.Header>Add Account</Modal.Header>
-        <Modal.Body padding={0}>
-          <AddForm />
+        <Modal.Body padding={0} marginBottom={5}>
+          <AddForm onCloseModal={setModalVisible} />
         </Modal.Body>
-        <Modal.Footer>
-          <Button.Group space={2}>
-            <Button
-              variant="ghost"
-              colorScheme="blueGray"
-              onPress={() => {
-                setModalVisible(false);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              onPress={() => {
-                setModalVisible(false);
-              }}
-            >
-              Save
-            </Button>
-          </Button.Group>
-        </Modal.Footer>
       </Modal.Content>
     </Modal>
   );
