@@ -1,14 +1,23 @@
 import { View, Text, StyleSheet } from "react-native";
-import React from "react";
+import React, { useState } from "react";
+import { IconButton } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
-import AddForm from "../components/AddForm";
+import ModalForm from "../components/ModalForm";
 
 const Home = () => {
+  const [openForm, setOpenForm] = useState(false);
   return (
     <View style={styles.root}>
-      <Text>Home</Text>
-      <AddForm />
-      <Ionicons name="md-add-circle-outline" size={48} color="black" />
+      <ModalForm modalVisible={openForm} setModalVisible={setOpenForm} />
+
+      <IconButton
+        onPress={() => {
+          setOpenForm(!openForm);
+        }}
+        style={{ position: "absolute", right: 4, bottom: 10 }}
+        borderRadius="full"
+        icon={<Ionicons name="md-add-circle-outline" size={48} color="black" />}
+      />
     </View>
   );
 };
@@ -21,5 +30,6 @@ const styles = StyleSheet.create({
     height: "100%",
     flex: 1,
     alignItems: "center",
+    justifyContent: "center",
   },
 });

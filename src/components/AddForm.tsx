@@ -10,12 +10,9 @@ const AddForm = () => {
 
   return (
     <Box
-      maxW="400"
-      rounded="lg"
       bgColor={"white"}
       overflow="hidden"
       borderColor="coolGray.200"
-      borderWidth="1"
       justifyContent={"center"}
       alignItems={"center"}
     >
@@ -24,11 +21,11 @@ const AddForm = () => {
           Types
         </Text>
         <HStack
-          maxW="380"
+          maxW="350"
           alignItems={"center"}
           justifyContent={"center"}
           borderWidth={1}
-          borderRadius={5}
+          borderRadius={3}
         >
           {btnTypes.map((type, index) => {
             return (
@@ -62,10 +59,6 @@ const AddForm = () => {
           console.log("first");
         }}
       />
-
-      <Box marginY={2} alignItems={"center"}>
-        <Button w="300">Save</Button>
-      </Box>
     </Box>
   );
 };

@@ -17,7 +17,7 @@ const TypeButton = ({
     <Pressable
       fontSize="md"
       borderRightWidth={last ? 0 : 1}
-      paddingX={4}
+      paddingX={3}
       paddingY={2}
       bgColor={currentActive ? "#0A91B3" : "white"}
       onPress={() => {

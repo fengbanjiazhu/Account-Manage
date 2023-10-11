@@ -1,4 +1,4 @@
-import { Box, Text, Input } from "native-base";
+import { Box, Text, Input, FormControl } from "native-base";
 import React from "react";
 
 type labelInputProps = {
@@ -8,10 +8,10 @@ type labelInputProps = {
 const LabelInput = ({ label, onChange }: labelInputProps) => {
   return (
     <Box marginBottom={2}>
-      <Text fontSize="md" marginLeft={4}>
-        {label}
-      </Text>
-      <Input mx="4" w="300" bgColor={"gray.200"} onChangeText={onChange}></Input>
+      <FormControl>
+        <FormControl.Label paddingX={4}>{label}</FormControl.Label>
+        <Input mx="4" w="280" bgColor={"gray.200"} onChangeText={onChange}></Input>
+      </FormControl>
     </Box>
   );
 };
