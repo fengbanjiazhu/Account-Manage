@@ -2,6 +2,10 @@ import { Input, Box, Text, Button, HStack, FormControl } from "native-base";
 import React, { useState } from "react";
 import TypeButton from "./TypeButton";
 
+import { getUUID } from "../utils/UUID";
+import { save, load, clearAll } from "../utils/Storage";
+import { type AccountData } from "../utils/Storage";
+
 const btnTypes = ["Game", "Platform", "Bank", "Others"];
 
 const AddForm = ({
@@ -13,6 +17,13 @@ const AddForm = ({
   const [accountName, setAccountName] = useState("");
   const [account, setAccount] = useState("");
   const [password, setPassword] = useState("");
+
+  const clearInput = () => {
+    setAccountType("Game");
+    setPassword("");
+    setAccountName("");
+    setAccount("");
+  };
 
   return (
     <Box
@@ -47,15 +58,15 @@ const AddForm = ({
         </HStack>
       </Box>
 
-      <FormControl padding={1} marginBottom={4}>
+      <FormControl isRequired padding={1} marginBottom={4}>
         <FormControl.Label>Name</FormControl.Label>
-        <Input onChangeText={setAccountName} bgColor={"gray.100"}></Input>
+        <Input onChangeText={setAccountName} value={accountName} bgColor={"gray.100"}></Input>
 
         <FormControl.Label>Account</FormControl.Label>
-        <Input onChangeText={setAccount} bgColor={"gray.100"}></Input>
+        <Input onChangeText={setAccount} value={account} bgColor={"gray.100"}></Input>
 
         <FormControl.Label>Password</FormControl.Label>
-        <Input onChangeText={setPassword} bgColor={"gray.100"}></Input>
+        <Input onChangeText={setPassword} value={password} bgColor={"gray.100"}></Input>
       </FormControl>
 
       <Button.Group space={2}>
@@ -69,8 +80,26 @@ const AddForm = ({
           Cancel
         </Button>
         <Button
-          onPress={() => {
-            console.log(accountType, accountName, account, password);
+          onPress={async () => {
+            const id: string = getUUID();
+            if (accountName === "" || account === "" || password === "") return;
+
+            const newAccount = {
+              id,
+              type: accountType,
+              name: accountName,
+              account,
+              password,
+            } as AccountData;
+
+            const oldAccountList = await load("accountList");
+            if (!oldAccountList) return;
+
+            const newAccountList = [...oldAccountList, newAccount];
+
+            await save("accountList", newAccountList);
+
+            clearInput();
             onCloseModal(false);
           }}
         >
