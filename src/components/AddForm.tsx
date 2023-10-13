@@ -4,16 +4,19 @@ import TypeButton from "./TypeButton";
 
 import { getUUID } from "../utils/UUID";
 import { save, load } from "../utils/Storage";
-import { type AccountData } from "../types/type";
+import { type AccountData, SectionData, DataTypes } from "../types/type";
+import { getAndFilterData } from "../utils/helper";
 
-const btnTypes = ["Game", "Platform", "Bank", "Others"];
+const btnTypes: DataTypes[] = ["Game", "Platform", "Bank", "Others"];
 
 const AddForm = ({
   onCloseModal,
+  onUpdateData,
 }: {
   onCloseModal: React.Dispatch<React.SetStateAction<boolean>>;
+  onUpdateData: React.Dispatch<React.SetStateAction<[] | SectionData>>;
 }) => {
-  const [accountType, setAccountType] = useState("Game");
+  const [accountType, setAccountType] = useState<DataTypes>("Game");
   const [accountName, setAccountName] = useState("");
   const [account, setAccount] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +26,34 @@ const AddForm = ({
     setPassword("");
     setAccountName("");
     setAccount("");
+  };
+
+  const handleSave = async () => {
+    // save current input
+    const id: string = getUUID();
+    if (accountName === "" || account === "" || password === "") return;
+
+    const newAccount: AccountData = {
+      id,
+      type: accountType,
+      name: accountName,
+      account,
+      password,
+    };
+    const oldAccountList = await load("accountList");
+    if (!oldAccountList) return;
+
+    const newAccountList = [...oldAccountList, newAccount];
+    await save("accountList", newAccountList);
+
+    // update view
+    const filteredData = await getAndFilterData();
+    if (!filteredData) return;
+    onUpdateData(filteredData);
+
+    // clear input & close modal
+    clearInput();
+    onCloseModal(false);
   };
 
   return (
@@ -79,32 +110,7 @@ const AddForm = ({
         >
           Cancel
         </Button>
-        <Button
-          onPress={async () => {
-            const id: string = getUUID();
-            if (accountName === "" || account === "" || password === "") return;
-
-            const newAccount = {
-              id,
-              type: accountType,
-              name: accountName,
-              account,
-              password,
-            } as AccountData;
-
-            const oldAccountList = await load("accountList");
-            if (!oldAccountList) return;
-
-            const newAccountList = [...oldAccountList, newAccount];
-
-            await save("accountList", newAccountList);
-
-            clearInput();
-            onCloseModal(false);
-          }}
-        >
-          Save
-        </Button>
+        <Button onPress={handleSave}>Save</Button>
       </Button.Group>
     </Box>
   );

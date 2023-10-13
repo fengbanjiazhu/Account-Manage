@@ -1,5 +1,12 @@
-import { View, SectionList, StyleSheet, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import {
+  View,
+  SectionList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  LayoutAnimation,
+} from "react-native";
+import React, { useState } from "react";
 import { type SectionData, SingleSectionData, AccountData } from "../types/type";
 import { SectionListData } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
@@ -22,6 +29,15 @@ type iosIconMap = Record<
   "game-controller-outline" | "musical-notes-outline" | "cash-outline" | "apps-outline"
 >;
 
+type RenderSectionItemProp = {
+  item: AccountData;
+  index: number;
+} & SectionHeaderProp;
+
+type AccountListProps = {
+  sectionData: SectionData;
+};
+
 const iosIconMap: iosIconMap = {
   Game: "game-controller-outline",
   Platform: "musical-notes-outline",
@@ -29,41 +45,61 @@ const iosIconMap: iosIconMap = {
   Others: "apps-outline",
 };
 
-type RenderSectionItemProp = {
-  item: AccountData;
-  index: number;
-} & SectionHeaderProp;
-
-const renderSectionItem = ({ item, index, section }: RenderSectionItemProp) => {
-  return (
-    <View style={styles.itemLayout}>
-      <Text style={styles.itemName}>{item.name}</Text>
-      <View style={styles.contentLayout}>
-        <Text style={styles.itemContent}>{`Account:  ${item.account}`}</Text>
-        <Text style={styles.itemContent}>{`Password:  ${item.password}`}</Text>
-      </View>
-    </View>
-  );
-};
-
-const renderHeader = ({ section }: SectionHeaderProp) => {
-  return (
-    <View style={styles.groupHeader}>
-      <Ionicons name={iosIconMap[section.type]} size={24} color="black" />
-      <Text style={styles.typeText}>{section.type}</Text>
-
-      <TouchableOpacity style={styles.arrowButton}>
-        <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-type AccountListProps = {
-  sectionData: SectionData;
-};
-
 const AccountList = ({ sectionData }: AccountListProps) => {
+  const [sectionState, setSectionState] = useState({
+    Game: true,
+    Platform: true,
+    Bank: true,
+    Others: true,
+  });
+
+  const renderHeader = ({ section }: SectionHeaderProp) => {
+    const { type } = section;
+    const sectionDataLength = section.data.length > 0;
+    const currentSectionState = sectionState[type];
+
+    const pressHandler = () => {
+      const copyState = { ...sectionState };
+      copyState[type] = !copyState[type];
+      LayoutAnimation.easeInEaseOut();
+      setSectionState(copyState);
+    };
+
+    return (
+      <View
+        style={[
+          styles.groupHeader,
+          { borderBottomLeftRadius: sectionDataLength && currentSectionState ? 0 : 12 },
+          { borderBottomRightRadius: sectionDataLength && currentSectionState ? 0 : 12 },
+        ]}
+      >
+        <Ionicons name={iosIconMap[type]} size={24} color="black" />
+        <Text style={styles.typeText}>{type}</Text>
+
+        <TouchableOpacity style={styles.arrowButton} onPress={pressHandler}>
+          <MaterialIcons
+            name={currentSectionState ? "keyboard-arrow-down" : "keyboard-arrow-right"}
+            size={24}
+            color="black"
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  const renderSectionItem = ({ item, index, section }: RenderSectionItemProp) => {
+    if (!sectionState[section.type]) return null;
+    return (
+      <View style={styles.itemLayout}>
+        <Text style={styles.itemName}>{item.name}</Text>
+        <View style={styles.contentLayout}>
+          <Text style={styles.itemContent}>{`Account:  ${item.account}`}</Text>
+          <Text style={styles.itemContent}>{`Password:  ${item.password}`}</Text>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <SectionList
       style={{ width: "100%" }}

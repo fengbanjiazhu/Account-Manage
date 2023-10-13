@@ -7,13 +7,9 @@ import { load } from "../utils/Storage";
 import ModalForm from "../components/ModalForm";
 import AccountList from "../components/AccountList";
 
-import { dataSorter } from "../utils/helper";
-import { type AccountData } from "../types/type";
+import { dataSorter, getAndFilterData } from "../utils/helper";
 
-type SectionData = {
-  type: "Game" | "Platform" | "Bank" | "Others";
-  data: AccountData[] | [];
-}[];
+import { type SectionData } from "../types/type";
 
 const Home = () => {
   const [openForm, setOpenForm] = useState(false);
@@ -21,14 +17,9 @@ const Home = () => {
 
   useEffect(() => {
     const getAllData = async () => {
-      const allData = await load("accountList");
-      if (!allData) return;
-      const filteredData: SectionData = [
-        { type: "Game", data: dataSorter(allData, "Game") },
-        { type: "Platform", data: dataSorter(allData, "Platform") },
-        { type: "Bank", data: dataSorter(allData, "Bank") },
-        { type: "Others", data: dataSorter(allData, "Others") },
-      ];
+      const filteredData = await getAndFilterData();
+      if (!filteredData) return;
+
       setSectionData(filteredData);
     };
 
@@ -39,7 +30,7 @@ const Home = () => {
     <View style={styles.root}>
       <AccountList sectionData={sectionData} />
 
-      <ModalForm modalVisible={openForm} setModalVisible={setOpenForm} />
+      <ModalForm modalVisible={openForm} setModalVisible={setOpenForm} onSave={setSectionData} />
       <IconButton
         onPress={() => {
           setOpenForm(!openForm);

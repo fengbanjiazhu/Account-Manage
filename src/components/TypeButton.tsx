@@ -1,5 +1,6 @@
 import { Text, Pressable } from "native-base";
 import React from "react";
+import { DataTypes } from "../types/type";
 
 const TypeButton = ({
   text,
@@ -7,8 +8,8 @@ const TypeButton = ({
   active,
   last = false,
 }: {
-  text: string;
-  onPress: React.Dispatch<React.SetStateAction<string>>;
+  text: DataTypes;
+  onPress: React.Dispatch<React.SetStateAction<DataTypes>>;
   active: string;
   last?: boolean;
 }) => {

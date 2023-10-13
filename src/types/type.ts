@@ -8,6 +8,8 @@ export const DataSchema = z.object({
   password: z.string(),
 });
 
+export type DataTypes = "Game" | "Platform" | "Bank" | "Others";
+
 export type AccountData = z.infer<typeof DataSchema>;
 
 export type SingleSectionData = {
