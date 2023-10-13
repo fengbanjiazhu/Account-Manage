@@ -24,7 +24,7 @@ export const load = async (key: string): Promise<AccountData[] | [] | undefined>
     const res = await AsyncStorage.getItem(key);
     if (!res) return [];
 
-    console.log(res);
+    // console.log(res);
     const result = z.array(DataSchema).safeParse(JSON.parse(res));
 
     if (!result.success) throw new Error("something went wrong");

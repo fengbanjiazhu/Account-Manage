@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import TypeButton from "./TypeButton";
 
 import { getUUID } from "../utils/UUID";
-import { save, load, clearAll } from "../utils/Storage";
+import { save, load } from "../utils/Storage";
 import { type AccountData } from "../utils/Storage";
 
 const btnTypes = ["Game", "Platform", "Bank", "Others"];
