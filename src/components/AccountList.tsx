@@ -1,8 +1,8 @@
-import { View, SectionList, StyleSheet, Text } from "react-native";
+import { View, SectionList, StyleSheet, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import { type SectionData, SingleSectionData } from "../types/type";
+import { type SectionData, SingleSectionData, AccountData } from "../types/type";
 import { SectionListData } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
 type SectionHeaderProp = {
   section: SectionListData<
@@ -16,6 +16,7 @@ type SectionHeaderProp = {
     SingleSectionData
   >;
 };
+
 type iosIconMap = Record<
   string,
   "game-controller-outline" | "musical-notes-outline" | "cash-outline" | "apps-outline"
@@ -28,14 +29,32 @@ const iosIconMap: iosIconMap = {
   Others: "apps-outline",
 };
 
-const renderSectionItem = () => {
-  return <View></View>;
+type RenderSectionItemProp = {
+  item: AccountData;
+  index: number;
+} & SectionHeaderProp;
+
+const renderSectionItem = ({ item, index, section }: RenderSectionItemProp) => {
+  return (
+    <View style={styles.itemLayout}>
+      <Text style={styles.itemName}>{item.name}</Text>
+      <View style={styles.contentLayout}>
+        <Text style={styles.itemContent}>{`Account:  ${item.account}`}</Text>
+        <Text style={styles.itemContent}>{`Password:  ${item.password}`}</Text>
+      </View>
+    </View>
+  );
 };
+
 const renderHeader = ({ section }: SectionHeaderProp) => {
   return (
     <View style={styles.groupHeader}>
       <Ionicons name={iosIconMap[section.type]} size={24} color="black" />
       <Text style={styles.typeText}>{section.type}</Text>
+
+      <TouchableOpacity style={styles.arrowButton}>
+        <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -46,15 +65,14 @@ type AccountListProps = {
 
 const AccountList = ({ sectionData }: AccountListProps) => {
   return (
-    <>
-      <SectionList
-        sections={sectionData}
-        keyExtractor={(item, index) => `${item}-${index}`}
-        renderItem={renderSectionItem}
-        renderSectionHeader={renderHeader}
-        contentContainerStyle={styles.listContainer}
-      ></SectionList>
-    </>
+    <SectionList
+      style={{ width: "100%" }}
+      sections={sectionData}
+      keyExtractor={(item, index) => `${item}-${index}`}
+      renderItem={renderSectionItem}
+      renderSectionHeader={renderHeader}
+      contentContainerStyle={styles.listContainer}
+    ></SectionList>
   );
 };
 
@@ -79,5 +97,36 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     paddingHorizontal: 12,
+  },
+  arrowButton: {
+    position: "absolute",
+    right: 0,
+    padding: 16,
+  },
+  itemLayout: {
+    width: "100%",
+    flexDirection: "column",
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    backgroundColor: "white",
+    borderTopWidth: 1,
+    borderTopColor: "#e0e0e0",
+  },
+  itemName: {
+    fontSize: 16,
+    color: "#333",
+    fontWeight: "bold",
+  },
+  contentLayout: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  itemContent: {
+    flex: 1,
+    fontSize: 14,
+    color: "#666666",
+    marginTop: 12,
+    marginBottom: 4,
   },
 });
