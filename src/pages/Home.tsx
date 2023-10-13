@@ -2,12 +2,11 @@ import { View, StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
 import { IconButton } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
-import { load } from "../utils/Storage";
 
 import ModalForm from "../components/ModalForm";
 import AccountList from "../components/AccountList";
 
-import { dataSorter, getAndFilterData } from "../utils/helper";
+import { getAndFilterData } from "../utils/helper";
 
 import { type SectionData } from "../types/type";
 
