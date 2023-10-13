@@ -2,10 +2,13 @@ import { View, StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
 import { IconButton } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
-import ModalForm from "../components/ModalForm";
 import { load } from "../utils/Storage";
+
+import ModalForm from "../components/ModalForm";
+import AccountList from "../components/AccountList";
+
 import { dataSorter } from "../utils/helper";
-import { type AccountData } from "../utils/Storage";
+import { type AccountData } from "../types/type";
 
 type SectionData = {
   type: "Game" | "Platform" | "Bank" | "Others";
@@ -34,6 +37,8 @@ const Home = () => {
 
   return (
     <View style={styles.root}>
+      <AccountList sectionData={sectionData} />
+
       <ModalForm modalVisible={openForm} setModalVisible={setOpenForm} />
       <IconButton
         onPress={() => {

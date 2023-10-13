@@ -4,7 +4,7 @@ import TypeButton from "./TypeButton";
 
 import { getUUID } from "../utils/UUID";
 import { save, load } from "../utils/Storage";
-import { type AccountData } from "../utils/Storage";
+import { type AccountData } from "../types/type";
 
 const btnTypes = ["Game", "Platform", "Bank", "Others"];
 

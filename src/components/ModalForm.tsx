@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Button, Center, Modal } from "native-base";
+import React from "react";
+import { Modal } from "native-base";
 import AddForm from "./AddForm";
 
 const ModalForm = ({

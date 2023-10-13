@@ -1,14 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { z } from "zod";
-const DataSchema = z.object({
-  id: z.string(),
-  type: z.enum(["Game", "Platform", "Bank", "Others"]),
-  name: z.string(),
-  account: z.string(),
-  password: z.string(),
-});
-
-export type AccountData = z.infer<typeof DataSchema>;
+import { DataSchema } from "../types/type";
+import { type AccountData } from "../types/type";
 
 export const save = async (key: string, value: AccountData[]): Promise<void> => {
   const strValue = JSON.stringify(value);
