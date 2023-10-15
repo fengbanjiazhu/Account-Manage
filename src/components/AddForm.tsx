@@ -1,5 +1,5 @@
 import { Input, Box, Text, Button, HStack, FormControl } from "native-base";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TypeButton from "./TypeButton";
 
 import { getUUID } from "../utils/UUID";
@@ -12,14 +12,26 @@ const btnTypes: DataTypes[] = ["Game", "Platform", "Bank", "Others"];
 const AddForm = ({
   onCloseModal,
   onUpdateData,
+  onEdit,
 }: {
   onCloseModal: React.Dispatch<React.SetStateAction<boolean>>;
   onUpdateData: React.Dispatch<React.SetStateAction<[] | SectionData>>;
+  onEdit?: AccountData;
 }) => {
   const [accountType, setAccountType] = useState<DataTypes>("Game");
   const [accountName, setAccountName] = useState("");
   const [account, setAccount] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    if (onEdit) {
+      const { account, name, password, type } = onEdit;
+      setPassword(password);
+      setAccountName(name);
+      setAccount(account);
+      setAccountType(type);
+    }
+  }, [onEdit]);
 
   const clearInput = () => {
     setAccountType("Game");

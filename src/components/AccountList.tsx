@@ -10,6 +10,7 @@ import React, { useState } from "react";
 import { type SectionData, SingleSectionData, AccountData } from "../types/type";
 import { SectionListData } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import ModalForm from "./ModalForm";
 
 type SectionHeaderProp = {
   section: SectionListData<
@@ -36,6 +37,7 @@ type RenderSectionItemProp = {
 
 type AccountListProps = {
   sectionData: SectionData;
+  onSave: React.Dispatch<React.SetStateAction<[] | SectionData>>;
 };
 
 const iosIconMap: iosIconMap = {
@@ -45,7 +47,10 @@ const iosIconMap: iosIconMap = {
   Others: "apps-outline",
 };
 
-const AccountList = ({ sectionData }: AccountListProps) => {
+const AccountList = ({ sectionData, onSave }: AccountListProps) => {
+  const [showForm, setShowForm] = useState(false);
+  const [editData, setEditData] = useState<AccountData | undefined>(undefined);
+
   const [sectionState, setSectionState] = useState({
     Game: true,
     Platform: true,
@@ -89,26 +94,40 @@ const AccountList = ({ sectionData }: AccountListProps) => {
 
   const renderSectionItem = ({ item, index, section }: RenderSectionItemProp) => {
     if (!sectionState[section.type]) return null;
+    const handlePress = function () {
+      setEditData(item);
+      setShowForm(true);
+    };
+
     return (
-      <View style={styles.itemLayout}>
+      <TouchableOpacity style={styles.itemLayout} onPress={handlePress}>
         <Text style={styles.itemName}>{item.name}</Text>
         <View style={styles.contentLayout}>
           <Text style={styles.itemContent}>{`Account:  ${item.account}`}</Text>
           <Text style={styles.itemContent}>{`Password:  ${item.password}`}</Text>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
   return (
-    <SectionList
-      style={{ width: "100%" }}
-      sections={sectionData}
-      keyExtractor={(item, index) => `${item}-${index}`}
-      renderItem={renderSectionItem}
-      renderSectionHeader={renderHeader}
-      contentContainerStyle={styles.listContainer}
-    ></SectionList>
+    <>
+      <SectionList
+        style={{ width: "100%" }}
+        sections={sectionData}
+        keyExtractor={(item, index) => `${item}-${index}`}
+        renderItem={renderSectionItem}
+        renderSectionHeader={renderHeader}
+        contentContainerStyle={styles.listContainer}
+      ></SectionList>
+
+      <ModalForm
+        modalVisible={showForm}
+        setModalVisible={setShowForm}
+        onSave={onSave}
+        onEdit={editData}
+      />
+    </>
   );
 };
 

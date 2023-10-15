@@ -27,9 +27,10 @@ const Home = () => {
 
   return (
     <View style={styles.root}>
-      <AccountList sectionData={sectionData} />
+      <AccountList sectionData={sectionData} onSave={setSectionData} />
 
       <ModalForm modalVisible={openForm} setModalVisible={setOpenForm} onSave={setSectionData} />
+
       <IconButton
         onPress={() => {
           setOpenForm(!openForm);
