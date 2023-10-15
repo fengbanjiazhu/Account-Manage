@@ -24,7 +24,7 @@ const AddForm = ({
   const [password, setPassword] = useState("");
   const [id, setId] = useState("");
 
-  const updating = onEdit! == undefined;
+  const updating = onEdit !== undefined;
 
   useEffect(() => {
     if (!onEdit) return;
@@ -46,7 +46,7 @@ const AddForm = ({
 
   const handleSaving = async () => {
     // If creating, set a new id
-    if (!onEdit) setId(getUUID());
+    if (!updating) setId(getUUID());
 
     if (accountName === "" || account === "" || password === "" || id === "") return;
 
@@ -57,6 +57,7 @@ const AddForm = ({
       account,
       password,
     };
+
     const allAccountList = await load("accountList");
     if (!allAccountList) return;
 
