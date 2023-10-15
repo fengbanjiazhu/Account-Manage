@@ -22,15 +22,19 @@ const AddForm = ({
   const [accountName, setAccountName] = useState("");
   const [account, setAccount] = useState("");
   const [password, setPassword] = useState("");
+  const [id, setId] = useState("");
+
+  const updating = onEdit! == undefined;
 
   useEffect(() => {
-    if (onEdit) {
-      const { account, name, password, type } = onEdit;
-      setPassword(password);
-      setAccountName(name);
-      setAccount(account);
-      setAccountType(type);
-    }
+    if (!onEdit) return;
+
+    const { account, name, password, type, id } = onEdit;
+    setPassword(password);
+    setAccountName(name);
+    setAccount(account);
+    setAccountType(type);
+    setId(id);
   }, [onEdit]);
 
   const clearInput = () => {
@@ -40,10 +44,11 @@ const AddForm = ({
     setAccount("");
   };
 
-  const handleSave = async () => {
-    // save current input
-    const id: string = getUUID();
-    if (accountName === "" || account === "" || password === "") return;
+  const handleSaving = async () => {
+    // If creating, set a new id
+    if (!onEdit) setId(getUUID());
+
+    if (accountName === "" || account === "" || password === "" || id === "") return;
 
     const newAccount: AccountData = {
       id,
@@ -52,9 +57,10 @@ const AddForm = ({
       account,
       password,
     };
-    const oldAccountList = await load("accountList");
-    if (!oldAccountList) return;
+    const allAccountList = await load("accountList");
+    if (!allAccountList) return;
 
+    const oldAccountList = allAccountList.filter((account) => account.id !== id);
     const newAccountList = [...oldAccountList, newAccount];
     await save("accountList", newAccountList);
 
@@ -122,7 +128,8 @@ const AddForm = ({
         >
           Cancel
         </Button>
-        <Button onPress={handleSave}>Save</Button>
+
+        <Button onPress={handleSaving}>{updating ? "Save" : "Update"}</Button>
       </Button.Group>
     </Box>
   );
