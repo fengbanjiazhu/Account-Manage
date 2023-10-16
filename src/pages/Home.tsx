@@ -1,5 +1,6 @@
 import { View, StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
+import type { StackNavigationProp } from "@react-navigation/stack";
 import { IconButton } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -10,9 +11,38 @@ import { getAndFilterData } from "../utils/helper";
 
 import { type SectionData } from "../types/type";
 
-const Home = () => {
+type RootStackParamList = {
+  Home: undefined;
+};
+
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, "Home">;
+
+const Home = ({ navigation }: { navigation: HomeScreenNavigationProp }) => {
   const [openForm, setOpenForm] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [sectionData, setSectionData] = useState<SectionData | []>([]);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <IconButton
+          onPress={() => {
+            setShowPassword(!showPassword);
+            console.log(showPassword);
+          }}
+          marginRight={2}
+          borderRadius="full"
+          icon={
+            <Ionicons
+              name={showPassword ? "eye-outline" : "eye-off-outline"}
+              size={24}
+              color="black"
+            />
+          }
+        />
+      ),
+    });
+  }, [navigation, showPassword]);
 
   useEffect(() => {
     const getAllData = async () => {
@@ -27,7 +57,7 @@ const Home = () => {
 
   return (
     <View style={styles.root}>
-      <AccountList sectionData={sectionData} onSave={setSectionData} />
+      <AccountList sectionData={sectionData} onSave={setSectionData} showPassword={showPassword} />
 
       <ModalForm modalVisible={openForm} setModalVisible={setOpenForm} onSave={setSectionData} />
 

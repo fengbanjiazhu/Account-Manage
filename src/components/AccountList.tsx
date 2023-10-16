@@ -37,6 +37,7 @@ type RenderSectionItemProp = {
 
 type AccountListProps = {
   sectionData: SectionData;
+  showPassword: boolean;
   onSave: React.Dispatch<React.SetStateAction<[] | SectionData>>;
 };
 
@@ -47,7 +48,7 @@ const iosIconMap: iosIconMap = {
   Others: "apps-outline",
 };
 
-const AccountList = ({ sectionData, onSave }: AccountListProps) => {
+const AccountList = ({ sectionData, showPassword, onSave }: AccountListProps) => {
   const [showForm, setShowForm] = useState(false);
   const [editData, setEditData] = useState<AccountData | undefined>(undefined);
 
@@ -104,7 +105,9 @@ const AccountList = ({ sectionData, onSave }: AccountListProps) => {
         <Text style={styles.itemName}>{item.name}</Text>
         <View style={styles.contentLayout}>
           <Text style={styles.itemContent}>{`Account:  ${item.account}`}</Text>
-          <Text style={styles.itemContent}>{`Password:  ${item.password}`}</Text>
+          <Text style={styles.itemContent}>{`Password:  ${
+            showPassword ? item.password : "******"
+          }`}</Text>
         </View>
       </TouchableOpacity>
     );
