@@ -28,7 +28,6 @@ const Home = ({ navigation }: { navigation: HomeScreenNavigationProp }) => {
         <IconButton
           onPress={() => {
             setShowPassword(!showPassword);
-            console.log(showPassword);
           }}
           marginRight={2}
           borderRadius="full"
